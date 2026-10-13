@@ -3,6 +3,7 @@
   const header = document.getElementById('siteHeader');
   const items = Array.from(document.querySelectorAll('.has-menu'));
   const timers = new WeakMap();
+  let intent = null;
 
   function anyOpen() { return items.some((i) => i.classList.contains('is-open')); }
 
@@ -20,14 +21,21 @@
   }
   function closeSoon(item) {
     clearTimeout(timers.get(item));
-    timers.set(item, setTimeout(() => close(item), 120));
+    timers.set(item, setTimeout(() => close(item), 250));
   }
   function closeAll() { items.forEach(close); }
 
   items.forEach((item) => {
     const link = item.querySelector('.nav-link');
-    item.addEventListener('mouseenter', () => open(item));
-    item.addEventListener('mouseleave', () => closeSoon(item));
+    item.addEventListener('mouseenter', () => {
+      clearTimeout(intent);
+      if (anyOpen() && !item.classList.contains('is-open')) {
+        intent = setTimeout(() => open(item), 200);   // si solo pasas por encima camino a la foto, no cambia de menú
+      } else {
+        open(item);
+      }
+    });
+    item.addEventListener('mouseleave', () => { clearTimeout(intent); closeSoon(item); });
     item.addEventListener('focusin', () => open(item));
     item.addEventListener('focusout', (e) => { if (!item.contains(e.relatedTarget)) closeSoon(item); });
     link.addEventListener('click', (e) => {
@@ -73,15 +81,16 @@
     { prefix: 'boardshorts', type: 'bottom', label: 'Board shorts' },
   ];
   /* COLECCIONES (menú COLLECTION). Cada foto con este nombre aparece SOLO en esa colección:
-     dreamy1.jpg, dreamy2.jpg ...        -> DREAMY BLOOMS
-     heartfelt1.jpg, heartfelt2.jpg ...  -> HEARTFELT PETALS
-     sparkling1.jpg, sparkling2.jpg ...  -> THE SPARKLING TOUCH
-     (fotos extra: dreamy1-2.jpg, dreamy1-3.jpg, dreamy1-4.jpg)
+     dreamy-blooms1.jpg, dreamy-blooms2.jpg, dreamy-blooms3.jpg ...            -> DREAMY BLOOMS
+     heartfelt-petals1.jpg, heartfelt-petals2.jpg ...                          -> HEARTFELT PETALS
+     the-sparkling-touch1.jpg, the-sparkling-touch2.jpg ...                    -> THE SPARKLING TOUCH
+     (fotos extra del mismo producto: dreamy-blooms1-2.jpg, dreamy-blooms1-3.jpg, dreamy-blooms1-4.jpg)
+     La foto del MENÚ de SHOP es distinta: dreamy-blooms.jpg (sin número).
      Si quieres que un producto esté también en T-shirt/Sportswear, sube su foto también con ese nombre. */
   const COLLECTIONS = [
-    { prefix: 'dreamy',    slug: 'dreamy-blooms',       title: 'Dreamy Blooms' },
-    { prefix: 'heartfelt', slug: 'heartfelt-petals',    title: 'Heartfelt Petals' },
-    { prefix: 'sparkling', slug: 'the-sparkling-touch', title: 'The Sparkling Touch' },
+    { prefix: 'dreamy-blooms',       slug: 'dreamy-blooms',       title: 'Dreamy Blooms' },
+    { prefix: 'heartfelt-petals',    slug: 'heartfelt-petals',    title: 'Heartfelt Petals' },
+    { prefix: 'the-sparkling-touch', slug: 'the-sparkling-touch', title: 'The Sparkling Touch' },
   ];
   const MAX_PER_SECTION = 60;          // máximo de productos por sección
   const USE_SAMPLES_IF_EMPTY = true;   // si no hay ninguna foto con esos nombres, se muestran los de ejemplo
@@ -112,6 +121,38 @@
   const sortEl = document.getElementById('sort');
   const shopLink = document.getElementById('shopLink');
   let current = { kind: 'shop', slug: 'all-items' };
+
+  /* Portada de la colección: al abrir una colección se ve primero la foto del menú
+     (dreamy-blooms.jpg, o menu1.jpg si no existe), y debajo todas las fotos de la colección. */
+  const COVER_FALLBACK = { 'dreamy-blooms': 'menu1.jpg', 'heartfelt-petals': 'menu2.jpg', 'the-sparkling-touch': 'menu3.jpg' };
+  const cover = document.createElement('div');
+  cover.style.cssText = 'display:none;justify-content:center;margin:6px 0 34px;';
+  const coverImg = document.createElement('img');
+  coverImg.alt = '';
+  coverImg.style.cssText = 'display:block;width:min(560px,100%);height:auto;max-height:78vh;object-fit:contain;';
+  cover.appendChild(coverImg);
+  listing.insertBefore(cover, listing.querySelector('.sortbar'));
+  let coverToken = 0;
+
+  function showCover(slug) {
+    const token = ++coverToken;
+    cover.style.display = 'none';
+    if (!slug) return;
+    const tries = [slug + '.jpg', COVER_FALLBACK[slug]].filter(Boolean);
+    (function next(n) {
+      if (n >= tries.length) return;
+      const probeImg = new Image();
+      probeImg.onload = () => {
+        if (token !== coverToken) return;          // el usuario ya cambió de página
+        if (PRODUCTS.some((p) => p.col === slug && p.imgs && p.imgs.indexOf(tries[n]) !== -1)) return;   // ya sale en la cuadrícula
+        coverImg.src = tries[n];
+        coverImg.alt = TITLES[slug] || '';
+        cover.style.display = 'flex';
+      };
+      probeImg.onerror = () => next(n + 1);
+      probeImg.src = tries[n];
+    })(0);
+  }
 
   function filtered() {
     const { kind, slug } = current;
@@ -195,6 +236,7 @@
     const list = filtered();
     grid.innerHTML = '';
     list.forEach((p) => grid.appendChild(buildCard(p)));
+    empty.textContent = current.kind === 'collection' ? 'More photos coming soon.' : 'No products found.';
     empty.hidden = list.length > 0;
   }
 
@@ -216,6 +258,7 @@
       document.title = TITLES[slug] + ' – The Jungle Closet';
       sortEl.value = 'best';
       renderGrid();
+      showCover(kind === 'collection' ? slug : null);
       show(listing);
       document.body.classList.add('is-products');
       shopLink.classList.remove('is-active');
@@ -577,21 +620,47 @@
 })();
 
 /* =====================================================
-   MENÚ SHOP: fotos de las 3 tarjetas (sueltas junto a index.html)
-   Cambia los nombres si tus archivos se llaman distinto.
-   Si una foto no carga, esa tarjeta conserva el color de reemplazo.
+   MENÚ SHOP: la foto de cada tarjeta sale de LA MISMA foto de la colección.
+   Un solo nombre sirve para todo:
+     dreamy-blooms1.jpg  ->  sale en la tarjeta DREAMY BLOOMS del menú SHOP
+                              y es el primer producto dentro de la colección.
+   (dreamy-blooms2.jpg, dreamy-blooms3.jpg... salen solo dentro de la colección.)
+   Orden en que se busca la foto de la tarjeta:
+     1) dreamy-blooms.jpg   (foto exclusiva para el menú, opcional)
+     2) menu1.jpg           (nombre anterior, sigue funcionando)
+     3) dreamy-blooms1.jpg  (primera foto de la colección)
+   Si no existe ninguna, la tarjeta conserva el color de reemplazo.
    ===================================================== */
 (function () {
-  var MENU_PHOTOS = ['menu1.jpg', 'menu2.jpg', 'menu3.jpg'];
-  Array.prototype.forEach.call(document.querySelectorAll('.mega-card .shot'), function (shot, k) {
-    if (!MENU_PHOTOS[k]) return;
-    var img = new Image();
-    img.alt = '';
-    img.onload = function () {
-      shot.style.background = 'none';
-      shot.innerHTML = '';
-      shot.appendChild(img);
-    };
-    img.src = MENU_PHOTOS[k];
+  Array.prototype.forEach.call(document.querySelectorAll('.mega-card'), function (card, k) {
+    var shot = card.querySelector('.shot');
+    if (!shot) return;
+    var slug = (card.getAttribute('href') || '').split('/').pop();
+    if (!slug) return;
+    var candidates = [slug + '.jpg', 'menu' + (k + 1) + '.jpg', slug + '1.jpg'];
+
+    (function tryNext(n) {
+      if (n >= candidates.length) return;
+      var img = new Image();
+      img.alt = '';
+      img.draggable = false;
+      img.onload = function () {
+        shot.style.background = 'none';
+        shot.innerHTML = '';
+        shot.appendChild(img);
+      };
+      img.onerror = function () { tryNext(n + 1); };
+      img.src = candidates[n];
+    })(0);
   });
 })();
+
+/* =====================================================
+   CLIC FIRME en fotos y enlaces
+   Los navegadores permiten "arrastrar" imágenes y enlaces. Si el mouse se mueve unos
+   píxeles mientras haces clic, empieza un arrastre y el clic se cancela (parece que
+   la foto "no hace nada"). Aquí se desactiva el arrastre para que el clic siempre cuente.
+   ===================================================== */
+document.addEventListener('dragstart', function (e) {
+  if (e.target && e.target.closest && e.target.closest('a, img')) e.preventDefault();
+});

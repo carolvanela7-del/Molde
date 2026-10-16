@@ -650,3 +650,257 @@ html.drawer-open { overflow: hidden; }
 .show-dots button[aria-selected="true"] { background: #333; border-color: #333; }
 .show-dots button:hover { border-color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .show-item, .show-fig { transition: none; } }
+
+/* =====================================================================
+   THE JUNGLE CLOSET - extras.css
+   Estilos de: ABOUT US, página de producto y carrito con productos.
+   (Crear cuenta usa los estilos del login que ya tienes.)
+   ===================================================================== */
+
+/* ---------- ABOUT US ---------- */
+.about { padding: 44px 20px 110px; background: var(--white); color: var(--ink); }
+.about[hidden] { display: none; }
+.about-title { font-family: "Times New Roman", Times, "Noto Serif", serif; text-transform: uppercase; font-size: clamp(30px, 3.6vw, 40px); letter-spacing: .01em; }
+.about-card {
+  width: min(612px, 100%); margin: 36px auto 0;
+  padding: clamp(36px, 6vw, 62px) clamp(18px, 5vw, 56px) clamp(36px, 6vw, 58px);
+  background: var(--announce); text-align: center;
+}
+.about-tag { margin: 0; font: 400 10px/1 "Figtree", Arial, sans-serif; letter-spacing: .32em; text-transform: uppercase; color: #e4bfcc; }
+.about-card h2 {
+  margin: 34px 0 0; font: 400 clamp(30px, 6vw, 46px)/1.22 "Times New Roman", Times, "Noto Serif", serif;
+  letter-spacing: .12em; color: #111;
+}
+.about-line { display: block; width: 36px; height: 1px; margin: 34px auto 0; background: #e8b4c4; }
+.about-quote { margin: 26px 0 0; font: italic 400 14px/2 "Times New Roman", Times, "Noto Serif", serif; color: #555; }
+
+/* ---------- Página de producto ---------- */
+.product { padding: 18px clamp(20px, 3vw, 40px) 100px; background: var(--white); color: var(--ink); }
+.product[hidden] { display: none; }
+.crumbs { display: flex; justify-content: space-between; gap: 16px; font: 400 10px/1.4 "Figtree", Arial, sans-serif; color: #7a6a63; }
+.crumbs a { color: inherit; text-decoration: none; }
+.crumbs a:hover { color: var(--accent); }
+.crumbs .sep { margin: 0 7px; }
+.crumbs .cur { color: var(--accent); }
+.crumb-r { display: flex; gap: 18px; white-space: nowrap; }
+
+.pgrid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 96px); max-width: 1180px; margin: 32px auto 0; align-items: start;
+}
+.gal { display: flex; flex-direction: column; align-items: center; }
+.gal-stage { position: relative; width: min(100%, 520px); aspect-ratio: 3 / 4; background: var(--white); }
+.gslide { position: absolute; inset: 0; opacity: 0; transition: opacity .25s ease; }
+.gslide.is-on { opacity: 1; }
+.gslide img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.gal-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 44px;
+  display: grid; place-items: center; border: 0; background: none; color: #333; cursor: pointer;
+}
+.gal-prev { left: -44px; } .gal-next { right: -44px; }
+.gal-arrow svg { width: 11px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.gal-arrow:hover { color: var(--accent); }
+.gal-thumbs { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 28px; }
+.gthumb { position: relative; width: 54px; aspect-ratio: 3 / 4; padding: 0 0 4px; border: 0; background: var(--white); overflow: hidden; cursor: pointer; opacity: .75; transition: opacity .2s ease; }
+.gthumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.gthumb .fig { pointer-events: none; }
+.gthumb::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: transparent; }
+.gthumb:hover { opacity: 1; }
+.gthumb.is-cur { opacity: 1; }
+.gthumb.is-cur::after { background: #111; }
+
+.pinfo { padding-top: 4px; max-width: 520px; }
+.ptitle { margin: 0; font: 400 clamp(28px, 3.1vw, 38px)/1.18 "Noto Serif", Georgia, serif; text-transform: uppercase; }
+.pprice { margin: 20px 0 0; font: 600 16px "Figtree", Arial, sans-serif; color: #555; }
+.plabel { margin: 28px 0 10px; font: 400 11px "Figtree", Arial, sans-serif; color: #555; }
+.sizes { display: flex; flex-wrap: wrap; gap: 12px; }
+.size {
+  min-width: 40px; height: 38px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 2px;
+  background: #fff; color: #555; font: 400 10px "Figtree", Arial, sans-serif; cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.size:hover { border-color: #999; }
+.size.is-sel { border-color: #111; color: #111; }
+
+.policy {
+  height: 118px; margin-top: 26px; padding: 12px 12px 4px; overflow-y: scroll;
+  border: 1px solid #cfcfcf; border-radius: 2px; font: 400 11px/1.55 "Figtree", Arial, sans-serif; color: #333;
+}
+.policy h3 { margin: 0 0 10px; font: 600 11px/1.3 "Figtree", Arial, sans-serif; letter-spacing: .02em; }
+.policy p { margin: 0 0 9px; padding-left: 14px; }
+.accept { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; font: 400 11px/1.5 "Figtree", Arial, sans-serif; color: #444; }
+.accept input { margin-top: 2px; flex: none; }
+.accept b { font-weight: 700; color: #111; text-decoration: underline; text-underline-offset: 2px; }
+.atc {
+  display: block; width: 100%; height: 48px; margin-top: 26px; padding: 0; cursor: pointer;
+  border: 1px solid #333; border-radius: 2px; background: #fff; color: #111;
+  font: 500 11px/1 "Figtree", Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  transition: background-color .2s ease, color .2s ease;
+}
+.atc:not(:disabled):hover { background: #111; color: #fff; }
+.atc:disabled { border-color: #b9b9b9; color: #b0b0b0; cursor: not-allowed; }
+
+.acc { margin-top: 34px; border-top: 1px solid #e3e3e3; }
+.acc-h { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 16px 0; border: 0; background: none; cursor: pointer; text-align: left; font: 500 11px "Figtree", Arial, sans-serif; color: #555; }
+.acc-i::before { content: "\2212"; font-size: 16px; }
+.acc-h[aria-expanded="false"] .acc-i::before { content: "+"; }
+.acc-b { padding: 0 0 24px; font: 400 11px/1.9 "Figtree", Arial, sans-serif; color: #666; }
+.acc-b[hidden] { display: none; }
+.acc-b p { margin: 0 0 10px; }
+
+@media (max-width: 860px) {
+  .pgrid { grid-template-columns: 1fr; gap: 28px; margin-top: 22px; }
+  .gal-prev { left: 4px; } .gal-next { right: 4px; }
+  .pinfo { max-width: none; }
+}
+
+/* ---------- Carrito con productos ---------- */
+.cart.has-items { align-items: stretch; padding-top: 60px; text-align: left; }
+.cart-full { width: min(760px, 100%); margin: 0 auto; }
+.cart-full h1 { margin: 0 0 30px; text-align: center; }
+.cart-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid #e3e3e3; }
+.cart-row { display: grid; grid-template-columns: 76px 1fr auto 78px 24px; gap: 16px; align-items: center; padding: 18px 0; border-bottom: 1px solid #e3e3e3; }
+.cart-thumb { display: block; width: 76px; aspect-ratio: 3 / 4; background: #fff; overflow: hidden; }
+.cart-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.cart-info { display: grid; gap: 4px; min-width: 0; }
+.cart-name { color: var(--ink); font-size: 14px; text-decoration: none; }
+.cart-name:hover { color: var(--accent); }
+.cart-size { font-size: 12px; color: #777; }
+.qty { display: inline-flex; align-items: center; gap: 12px; border: 1px solid #d9d9d9; border-radius: 2px; padding: 2px 8px; font-size: 13px; }
+.qty button { border: 0; background: none; font-size: 16px; line-height: 1; padding: 4px; cursor: pointer; color: #444; }
+.qty button:hover { color: var(--accent); }
+.cart-price { text-align: right; font-size: 14px; font-weight: 600; color: #444; }
+.cart-del { border: 0; background: none; color: #888; cursor: pointer; font-size: 13px; }
+.cart-del:hover { color: var(--accent); }
+.cart-total { display: flex; justify-content: space-between; margin-top: 22px; font-size: 15px; }
+.cart-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; }
+@media (max-width: 600px) {
+  .cart-row { grid-template-columns: 64px 1fr auto; }
+  .cart-thumb { width: 64px; }
+  .cart-price { grid-column: 2; text-align: left; }
+  .cart-del { grid-column: 3; }
+}
+
+/* =====================================================
+   ARREGLOS
+   1) El logo largo se partía en dos líneas y se salía de la barra.
+   2) En la página de producto, el nombre de la ruta (Home > All Items > ...) salía dentro
+      de una cajita con flecha: chocaba con la clase .cur del selector de moneda del pie.
+   ===================================================== */
+.logo { white-space: nowrap; font-size: clamp(26px, 2.5vw, 34px); letter-spacing: -.5px; }
+@media (max-width: 960px) {
+  .site-header .logo { white-space: normal; text-align: center; font-size: clamp(24px, 7.2vw, 32px); line-height: .95; }
+}
+.crumbs .cur {
+  appearance: none; -webkit-appearance: none;
+  height: auto; padding: 0; border: 0; border-radius: 0; background: none;
+  font: inherit; color: var(--accent); cursor: default;
+}
+
+/* =====================================================================
+   SIZE GUIDE (hombres), FAVORITES y EXCHANGE POLICY
+   ===================================================================== */
+.info-page { padding: 44px 20px 110px; background: var(--white); color: var(--ink); }
+.info-page[hidden] { display: none; }
+.info-body { width: min(900px, 100%); margin: 44px auto 0; font: 400 14px/1.8 "Figtree", Arial, sans-serif; color: #555; }
+.info-body p { margin: 0 0 18px; }
+.info-body a { color: var(--soft-pink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.info-body a:hover { color: var(--accent); }
+.info-list { margin: 0 0 22px; padding-left: 20px; }
+.info-list li { margin: 0 0 10px; }
+.info-list b { color: #222; font-weight: 600; }
+
+/* Size chart */
+.sg-card {
+  width: min(440px, 100%); margin: 40px auto 0; padding: 30px 26px 30px; text-align: center;
+  background: #fbf8f3 radial-gradient(circle at 18% 14%, #f6dfe6 0 2px, transparent 3px) 0 0 / 74px 74px;
+  border: 1px solid #efe6df; color: #5a4a50; font-family: "Cormorant Garamond", Georgia, serif;
+}
+.sg-brand { margin: 0; font-size: 12px; letter-spacing: .16em; color: #444; }
+.sg-title { margin: 10px 0 0; font: 300 clamp(44px, 10vw, 60px)/1 "Cormorant Garamond", Georgia, serif; letter-spacing: .01em; color: #cf6f93; }
+.sg-for { margin: 8px 0 22px; font-size: 13px; letter-spacing: .3em; color: #cf6f93; }
+.sg-grid { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 8px; align-items: start; text-align: left; }
+.sg-table { width: 100%; border-collapse: collapse; font-size: 13px; color: #5a4a50; }
+.sg-table th, .sg-table td { padding: 6px 3px; text-align: center; font-weight: 400; }
+.sg-table .sg-l { text-align: left; color: #cf6f93; letter-spacing: .06em; padding-right: 10px; border-right: 1px solid #d9a1b4; }
+.sg-table thead th { border-bottom: 1px solid #d9a1b4; }
+.sg-unit { margin: 6px 0 26px; text-align: right; font-size: 10px; letter-spacing: .04em; color: #5a4a50; }
+.sg-fig { display: block; width: 100%; height: auto; }
+@media (max-width: 520px) { .sg-grid { grid-template-columns: 1fr; } .sg-figure { max-width: 150px; margin: 0 auto; } }
+
+/* Favorites */
+.fav-btn {
+  position: absolute; top: 8px; right: 8px; z-index: 3; width: 34px; height: 34px; padding: 0;
+  display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(255, 255, 255, .78); color: #333; transition: color .2s ease, background-color .2s ease, transform .15s ease;
+}
+.fav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+.fav-btn:hover { color: var(--accent); transform: scale(1.08); }
+.fav-btn.is-on { color: var(--accent); }
+.fav-btn.is-on svg { fill: currentColor; }
+.fav-grid[hidden] { display: none; }
+.fav-empty { text-align: center; padding: 70px 0 40px; color: #555; }
+.fav-empty[hidden] { display: none; }
+.fav-empty-ico svg { width: 38px; height: 38px; fill: none; stroke: #777; stroke-width: 1.4; stroke-linejoin: round; }
+.fav-empty p { margin: 16px 0 0; font-size: 18px; font-family: "Noto Serif", Georgia, serif; color: #111; }
+.fav-empty .fav-hint { margin: 8px 0 26px; font: 400 13px "Figtree", Arial, sans-serif; color: #777; }
+
+/* =====================================================================
+   PAGO (checkout) y confirmación del pedido
+   ===================================================================== */
+.co-wrap { width: min(1040px, 100%); margin: 40px auto 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 56px; align-items: start; }
+.co-form h2, .co-summary h2 { margin: 30px 0 14px; font: 400 19px/1.3 "Noto Serif", Georgia, serif; color: #111; }
+.co-form h2:first-child { margin-top: 0; }
+.co-form label { display: block; margin: 0 0 6px; font: 500 12px "Figtree", Arial, sans-serif; color: #444; }
+.co-form input[type="text"], .co-form input[type="tel"], .co-form input[type="email"], .co-form textarea {
+  display: block; width: 100%; height: 46px; margin: 0 0 16px; padding: 0 14px;
+  border: 1px solid #d4d4d4; border-radius: 2px; background: #fff; color: #222; font: 400 14px "Figtree", Arial, sans-serif;
+}
+.co-form textarea { height: 92px; padding: 10px 14px; resize: vertical; }
+.co-form input:focus-visible, .co-form textarea:focus-visible { outline: 0; border-color: #888; }
+#coAddress[hidden] { display: none; }
+.co-opts { display: grid; gap: 10px; margin: 0 0 14px; }
+.co-opt { display: flex; align-items: flex-start; gap: 12px; margin: 0 !important; padding: 14px; border: 1px solid #d9d9d9; border-radius: 2px; cursor: pointer; font: 400 13px/1.4 "Figtree", Arial, sans-serif !important; color: #333 !important; }
+.co-opt input { margin-top: 2px; flex: none; accent-color: #111; }
+.co-opt small { display: block; margin-top: 3px; font-size: 11px; color: #777; }
+.co-opt:has(input:checked) { border-color: #111; background: #fafafa; }
+.co-note { margin: 0 0 18px; font: 400 12px/1.6 "Figtree", Arial, sans-serif; color: #666; }
+.co-submit { width: 100%; height: 50px; margin-top: 4px; }
+.co-summary { position: sticky; top: 20px; padding: 22px; border: 1px solid #e3e3e3; background: #fbfbfb; }
+.co-summary h2 { margin-top: 0; }
+.co-items { margin: 0 0 18px; padding: 0; list-style: none; }
+.co-items li { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececec; font: 400 13px "Figtree", Arial, sans-serif; }
+.co-thumb { position: relative; display: block; width: 56px; aspect-ratio: 3 / 4; background: #fff; border: 1px solid #e6e6e6; }
+.co-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.co-thumb .fig { width: 100%; height: 100%; }
+.co-thumb b { position: absolute; top: -8px; right: -8px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #111; color: #fff; font: 600 11px/20px "Figtree", Arial, sans-serif; text-align: center; }
+.co-name small { display: block; margin-top: 3px; color: #777; font-size: 11px; }
+.co-price { color: #444; }
+.co-row { display: flex; justify-content: space-between; padding: 6px 0; font: 400 13px "Figtree", Arial, sans-serif; color: #555; }
+.co-total { margin-top: 8px; padding-top: 14px; border-top: 1px solid #ddd; font-size: 15px; font-weight: 600; color: #111; }
+.co-empty { text-align: center; padding: 60px 0 20px; }
+.co-empty p { margin: 0 0 22px; font: 400 18px "Noto Serif", Georgia, serif; }
+.ok-card { width: min(560px, 100%); margin: 38px auto 0; padding: 34px 30px; text-align: center; background: var(--announce); font: 400 14px/1.7 "Figtree", Arial, sans-serif; color: #444; }
+.ok-card p { margin: 0 0 14px; }
+.ok-id { font-size: 16px; color: #111; }
+.ok-items { margin: 18px 0; padding: 0; list-style: none; font-size: 13px; color: #555; }
+.ok-total { font-weight: 600; color: #111; }
+.ok-help { font-size: 12px; margin-top: 18px !important; }
+@media (max-width: 860px) { .co-wrap { grid-template-columns: 1fr; gap: 34px; } .co-summary { order: -1; position: static; } }
+/* ---------- Pago: nombre/apellido, pantalla de tarjeta, espera y éxito ---------- */
+.co-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .co-two { grid-template-columns: 1fr; gap: 0; } }
+.co-form input[type="password"] { display: block; width: 100%; height: 46px; margin: 0 0 16px; padding: 0 14px; border: 1px solid #d4d4d4; border-radius: 2px; background: #fff; color: #222; font: 400 14px "Figtree", Arial, sans-serif; }
+.co-form input[type="password"]:focus-visible { outline: 0; border-color: #888; }
+.pay-card { width: min(420px, 100%); margin: 40px auto 0; }
+.pay-total { margin: -6px 0 18px; font-size: 13px; color: #777; }
+.pay-back { display: block; margin: 16px auto 0; border: 0; background: none; color: #777; font: 400 13px "Figtree", Arial, sans-serif; text-decoration: underline; cursor: pointer; }
+.pay-back:hover { color: var(--accent); }
+.ok-success { margin-top: 20px; }
+.ok-id { font-size: 20px; }
+.ok-check { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; background: #1e7e46; display: grid; place-items: center; animation: pop .4s ease; }
+.ok-check svg { width: 38px; height: 38px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ring { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; border: 4px solid #dbe7fb; border-top-color: #1a73e8; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ring { animation-duration: 3s; } .ok-check { animation: none; } }
